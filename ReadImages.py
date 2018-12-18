@@ -6,6 +6,8 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import os
 
+from progress import progress
+
 
 pokemon_dir = 'pokemon'
 
@@ -71,7 +73,7 @@ images = []
 labels = []
 
 # How many images per pokemon to load
-images_per_pokemon = 10
+images_per_pokemon = 15
 
 # Keep track of current iteration
 count = 0
@@ -81,6 +83,8 @@ for pkmn in os.listdir(pokemon_dir):
 
     # Current number of images loaded for this pokemon
     curr_imgs = 0
+
+    progress.printProgressBar(0, images_per_pokemon, prefix="{:<15}".format(pkmn+':'), suffix='Complete', length=50)
 
     # Add each image to the list, use most relevant search results
     for img in sorted(os.listdir(pkmn_dir)):
@@ -92,9 +96,9 @@ for pkmn in os.listdir(pokemon_dir):
         except (ValueError, OSError):
             continue
         count += 1
+
         # Some visualization for time spent loading
-        if count % 1000 == 0:
-            print('Current iteration: ' + str(count))
+        progress.printProgressBar(curr_imgs + 1, images_per_pokemon, prefix="{:<15}".format(pkmn+':'), suffix='Complete', length=50)
 
         # Increment num images loaded
         curr_imgs += 1
@@ -115,9 +119,3 @@ for i in range(num_images):
   plt.yticks([])
 
 plt.show()
-
-#plt.imshow(images[19])
-#plt.grid(False)
-#plt.colorbar()
-#plt.xlabel(labels[19])
-#plt.show()
