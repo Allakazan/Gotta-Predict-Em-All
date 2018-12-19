@@ -1,3 +1,4 @@
+# Libs
 import numpy as np
 import pandas as pd
 import cv2
@@ -6,9 +7,10 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import os
 
+# My Imports
 from progress import progress
 
-
+PIL.Image.MAX_IMAGE_PIXELS = 933120000
 pokemon_dir = 'pokemon'
 
 def convert_to_jpg(img_path):
@@ -73,7 +75,7 @@ images = []
 labels = []
 
 # How many images per pokemon to load
-images_per_pokemon = 15
+images_per_pokemon = 200
 
 # Keep track of current iteration
 count = 0
@@ -105,6 +107,12 @@ for pkmn in os.listdir(pokemon_dir):
         if curr_imgs >= images_per_pokemon:
             break
 
+images = np.array(images)
+labels = np.array(labels)
+
+# Saves in file
+np.save("data/Images" + str(images_per_pokemon) + "PokeData.npy", images)
+np.save("data/Labels" + str(images_per_pokemon) + "PokeData.npy", labels)
 
 num_rows = 3
 num_cols = 10
