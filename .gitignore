@@ -118,4 +118,5 @@ dmypy.json
 .idea/
 
 # Data
+data/
 pokemon/
