@@ -1,6 +1,5 @@
 # Libs
 import numpy as np
-import pandas as pd
 import cv2
 import PIL
 from PIL import Image
@@ -9,9 +8,11 @@ import os
 
 # My Imports
 from progress import progress
+from dict import dict
 
 PIL.Image.MAX_IMAGE_PIXELS = 933120000
 pokemon_dir = 'pokemon'
+
 
 def convert_to_jpg(img_path):
     # Convert png to jpeg
@@ -86,21 +87,21 @@ for pkmn in os.listdir(pokemon_dir):
     # Current number of images loaded for this pokemon
     curr_imgs = 0
 
-    progress.printProgressBar(0, images_per_pokemon, prefix="{:<15}".format(pkmn+':'), suffix='Complete', length=50)
+    progress.print_progress_bar(0, images_per_pokemon, prefix="{:<15}".format(pkmn+':'), suffix='Complete', length=50)
 
     # Add each image to the list, use most relevant search results
     for img in sorted(os.listdir(pkmn_dir)):
         # Attempt to add image and label to list
         try:
             images.append(open_convert(os.path.join(pkmn_dir, img)))
-            labels.append(pkmn)
+            labels.append(dict.find_index_by_name(pkmn))
         # Ignore garbage images
         except (ValueError, OSError):
             continue
         count += 1
 
         # Some visualization for time spent loading
-        progress.printProgressBar(curr_imgs + 1, images_per_pokemon, prefix="{:<15}".format(pkmn+':'), suffix='Complete', length=50)
+        progress.print_progress_bar(curr_imgs + 1, images_per_pokemon, prefix="{:<15}".format(pkmn+':'), suffix='Complete', length=50)
 
         # Increment num images loaded
         curr_imgs += 1
@@ -122,7 +123,7 @@ for i in range(num_images):
   plt.subplot(num_rows, num_cols, i+1)
   plt.grid(False)
   plt.imshow(images[i], cmap='gray')
-  plt.xlabel(labels[i])
+  plt.xlabel(dict.find_name_by_index(labels[i]))
   plt.xticks([])
   plt.yticks([])
 
